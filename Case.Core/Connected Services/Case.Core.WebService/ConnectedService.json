@@ -1,0 +1,22 @@
+{
+  "ExtendedData": {
+    "inputs": [
+      "http://62.248.56.117/WSTEST/Service.asmx"
+    ],
+    "collectionTypes": [
+      "System.Collections.Generic.Dictionary`2",
+      "System.Collections.Generic.List`1"
+    ],
+    "internalTypeAccess": true,
+    "messageContract": true,
+    "namespaceMappings": [
+      "*, Case.Core.WebService"
+    ],
+    "references": [
+      "Microsoft.Extensions.DependencyInjection, {Microsoft.Extensions.DependencyInjection, 5.0.2}",
+      "Microsoft.Extensions.DependencyInjection.Abstractions, {Microsoft.Extensions.DependencyInjection.Abstractions, 5.0.0}"
+    ],
+    "targetFramework": "net5.0",
+    "typeReuseMode": "All"
+  }
+}

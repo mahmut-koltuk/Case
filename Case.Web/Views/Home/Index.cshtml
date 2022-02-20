@@ -1,0 +1,121 @@
+﻿@model Case.Core.Model.TripSearchData
+
+@{
+    ViewData["Title"] = "Anasayfa";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Hoşgeldiniz</h1>
+</div>
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+{
+    <div class="container-sm">
+        <div class="row justify-content-center">
+            <div class="col">Nereden</div>
+            <div class="col">Nereye</div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col">
+                <input type="text" id="departure_place_name" class="form-control" />
+                @Html.HiddenFor(m => m.DeparturePlaceId, new { id = "departure_place_id" })
+                @*<input type="hidden" id="departure_place_id">*@
+            </div>
+            <div class="col">
+                <input type="text" id="arrival_place_name" class="form-control" />
+                @Html.HiddenFor(m => m.ArrivalPlaceId, new { id = "arrival_place_id" })
+                <input type="hidden" id="arrival_place_id">
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col">Gidiş Tarihi</div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col">
+                <input type="date" id="trip_date" asp-for="TripDate" />
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col">
+                <button type="submit" value="submit" id="view-trips" class="btn btn-primary">Otobüs Bileti Ara</button>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $("#departure_place_name").autocomplete({
+                delay: 500,
+                nameProperty: 'Name',
+                valueField: '#departure_place_id',
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Home/GetDeparturePlaceList",
+                        type: "POST",
+                        dataType: "json",
+                        data: { searchBy: request.term },
+                        success: function (data) {
+                            response($.map(data,
+                                function (item) {
+                                    return {
+                                        label: item.departurePlaceName,
+                                        value: item.departurePlaceId
+                                    };
+                                }));
+
+                        }
+                    });
+                },
+                messages: {
+                    noResults: "",
+                    results: ""
+                },
+                select: function (event, ui) {
+                    this.value = ui.item.label;
+                    $('#departure_place_id').val(ui.item.value);
+                    return false;
+                }
+            });
+        })
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#arrival_place_name").autocomplete({
+                delay: 500,
+                nameProperty: 'Name',
+                valueField: '#arrival_place_id',
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Home/GetArrivalPlaceList",
+                        type: "POST",
+                        dataType: "json",
+                        data: { searchBy: request.term },
+                        success: function (data) {
+                            response($.map(data,
+                                function (item) {
+                                    return {
+                                        label: item.arrivalPlaceName,
+                                        value: item.arrivalPlaceId
+                                    };
+                                }));
+
+                        }
+                    });
+                },
+                messages: {
+                    noResults: "",
+                    results: ""
+                },
+                select: function(event, ui) {
+                    this.value = ui.item.label;
+                    $('#arrival_place_id').val(ui.item.value);
+                    return false;
+                }
+            });
+        })
+    </script>
+}

@@ -1,0 +1,67 @@
+﻿@using Case.Web.Controllers
+@using Case.Core.Model
+@model List<Case.Core.Model.TripData>
+
+@{
+    ViewBag.Title = "Seferler";
+    Layout = "_Layout";
+}
+
+@section HeaderScripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $("body").on("click", ".trip-details", function () {
+                var url = $(this).data("target");
+                $.post(url, function (data) { })
+                    .done(function (data) {
+                        $("#details-popup .modal-body").html(data);
+                        $("#details-popup").modal("show");
+                    })
+                    .fail(function () {
+                        $("#details-popup .modal-body").text("Error!!");
+                        $("#details-popup").modal("show");
+                    });
+            });
+        })
+    </script>
+}
+
+<h2>Seferler</h2>
+
+@foreach (TripData tripData in Model)
+{
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col"><img src="@tripData.FirmLogo" class="rounded mx-auto d-block" alt="@tripData.FirmName"></div>
+            <div class="col">
+                <div class="container">
+                    <div class="row justify-content-center"><div class="col">@tripData.Time</div></div>
+                    @*<div class="row justify-content-center"><div class="col">@tripData.Duration</div></div>*@
+                </div>
+            </div>
+            <div class="col">@tripData.Route</div>
+            <div class="col">@String.Join(',', tripData.BusAttributes.Select(a => a.Description))</div>
+            <div class="col">@tripData.Price</div>
+            <div class="col"><a href="#" id="btnDetails" class="btn btn-primary btn-sm trip-details" data-target="/trip/details/?tripDataId=@tripData.Id">Detayları Göster</a></div>
+        </div>
+    </div>
+    <hr />
+}
+
+<div id="details-popup" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Sefer Detayı</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body">
+                <div id="DetailContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
